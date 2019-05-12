@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+#heading {
+  text-align: center;
+  margin-top: 10px;
+}
+
+#table-area {
+  margin: 20 px;
+}
+
+#query-input {
+  transition: 0.5s;
+}

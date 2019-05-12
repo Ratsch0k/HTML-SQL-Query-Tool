@@ -2,47 +2,61 @@ import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Alert from 'react-bootstrap/Alert';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 function App() {
   return (
     <Container fluid>
+      <h1 id='heading'><strong>PostgrSQL Query Tool</strong></h1>
       <Row>
-        <Col></Col>
-        <Col>
-          <AlertClosable />
+        <Col lg={3} md={1} xs={0}></Col>
+        <Col lg={6} md={10}>
+          <QueryInput />
         </Col>
-        <Col></Col>
+        <Col lg={3} md={1}xs={0}></Col>
       </Row>
-      <Row>
-        <Col></Col>
-        <Col>
-          <p>Here should be displayed text</p>
-          <hr />
-          <p>Here should be more text</p>
-        </Col>
-        <Col></Col>
-      </Row>
+      <Container id='table-area'>
+        <hr />
+      </Container>
     </Container>
   );
 }
 
-class AlertClosable extends React.Component {
-  constructor(props) {
-    super(props);
+class QueryInput extends React.Component {
+  constructor(props, context){
+    super(props, context);
 
-    this.state = { show: true };
+    this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.state = {
+      size: 'lg',
+      first: true,
+      className:'mb-3 mt-5',
+    };
+  }
+
+  handleSubmit(){
+    if(this.state.first){
+      this.setState({size:'sm', first: false, className: 'mb-1 mt-1'});
+    }
   }
 
   render() {
-    const handleClose = () => this.setState({ show: false });
-
-    return (
-    <Alert show={this.state.show}  variant='warning' dismissible onClose={handleClose}>
-      <Alert.Heading>Only For Development</Alert.Heading>
-      This is only a test site for testing architecture currently used in development
-    </Alert>
-  );
+    return(
+      <div>
+        <InputGroup className={this.state.className} size={this.state.size} id='query-input'>
+          <Form.Control id='query-command'
+            placeholder='PostgrSQL Query Command'
+            aria-describedby='query-button'/>
+          <InputGroup.Append>
+            <Button variant='outline-success'
+              onClick={this.handleSubmit} type="submit">Submit</Button>
+          </InputGroup.Append>
+        </InputGroup>
+      </div>
+    );
   }
 }
 
