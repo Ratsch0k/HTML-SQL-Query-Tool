@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import * as ReactDOM from "react-dom";
 
 function App() {
   return (
@@ -28,9 +29,11 @@ class QueryInput extends React.Component {
   constructor(props, context){
     super(props, context);
 
+    // Bind functions to object
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
 
+    // Initialize state
     this.state = {
       size: 'lg',
       first: true,
@@ -39,19 +42,41 @@ class QueryInput extends React.Component {
     };
   }
 
-  handleSubmit(event){
+  // Handle submit of sql command
+  handleSubmit(event) {
+    // Prevent site from refreshing
     event.preventDefault();
 
-    if(this.state.first) {
+    // If first submit, change state so animation plays
+    if (this.state.first) {
       this.setState({size: '', first: false, className: 'mb-1 mt-1'});
     }
 
+    // Send query as get request to node server
     const axios = require('axios');
+    axios.get('/query?C=' + this.state.value)
+        .then(function (res) {
+          console.log(res);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+    // Reset input
+    this.setState({value: ''});
   }
 
+
+  // Handles user input in query textfield
   handleChange(event){
+    // Set state to input
     this.setState({value: event.target.value});
-    return false;
+  }
+
+  // Hanlde operations for componentDidMount part of lifecycle
+  componentDidMount() {
+    // Focus on query input
+    ReactDOM.findDOMNode(this.refs.queryInput).focus();
   }
 
   render() {
@@ -62,14 +87,22 @@ class QueryInput extends React.Component {
             placeholder='PostgreSQL Query Command'
             aria-describedby='query-button'
             value={this.state.value}
-            onChange={this.handleChange}/>
+            onChange={this.handleChange}
+            ref='queryInput'/>
           <InputGroup.Append>
             <Button variant='outline-success'
-              onClick={this.handleSubmit} type="button">Submit</Button>
+              onClick={this.handleSubmit} type="button">Run</Button>
           </InputGroup.Append>
         </InputGroup>
       </Form>
     );
+  }
+}
+
+class QueryAlert extends React.Component {
+  constructor(props){
+    super(props);
+
   }
 }
 
