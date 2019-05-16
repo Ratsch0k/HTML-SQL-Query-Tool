@@ -13,8 +13,11 @@ code {
 }
 
 #heading {
-  text-align: center;
   margin-top: 10px;
+}
+
+.center {
+  text-align: center;
 }
 
 #table-area {
@@ -23,4 +26,13 @@ code {
 
 #query-input {
   transition: 0.5s;
+}
+
+.query {
+  font-weight: bold;
+  font-style: italic;
+}
+
+.query-desc{
+  color: darkgray;
 }

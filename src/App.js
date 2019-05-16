@@ -2,107 +2,80 @@ import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import * as ReactDOM from "react-dom";
+import QueryInput from './QueryInput';
+import QueryAlert from './QueryAlert';
 
-function App() {
-  return (
-    <Container fluid>
-      <h1 id='heading'><strong>PostgreSQL Query Tool</strong></h1>
-      <Row>
-        <Col lg={3} md={1} xs={0}></Col>
-        <Col lg={6} md={10}>
-          <QueryInput />
-        </Col>
-        <Col lg={3} md={1}xs={0}></Col>
-      </Row>
-      <Container id='table-area'>
-        <hr />
-      </Container>
-    </Container>
-  );
-}
+const historyLength = 5;
 
-class QueryInput extends React.Component {
-  constructor(props, context){
-    super(props, context);
+class App extends React.Component {
+  constructor(props){
+    super(props);
 
-    // Bind functions to object
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.requestData = this.requestData.bind(this);
 
-    // Initialize state
     this.state = {
-      size: 'lg',
-      first: true,
-      className:'mb-3 mt-5',
-      value: '',
+      queryCurrent: '',
+      queryHistory: [],
+      showAlert: false,
+      errorStatus: null,
     };
   }
 
-  // Handle submit of sql command
-  handleSubmit(event) {
-    // Prevent site from refreshing
-    event.preventDefault();
-
-    // If first submit, change state so animation plays
-    if (this.state.first) {
-      this.setState({size: '', first: false, className: 'mb-1 mt-1'});
+  requestData(queryInput){
+    const history = this.state.queryHistory;
+    // Update state
+    this.setState({queryCurrent: queryInput, queryHistory: history.concat([queryInput])});
+    // Limit capacity of history
+    if(this.state.queryHistory.length >= historyLength) {
+      this.setState({queryHistory: history.splice(0, 1)});
     }
 
     // Send query as get request to node server
+    let errorOccurred = false;
+    let errorStatus = null;
     const axios = require('axios');
-    axios.get('/query?C=' + this.state.value)
+    axios.get('/query?q=' + queryInput)
         .then(function (res) {
           console.log(res);
         })
         .catch(function (error) {
-          console.log(error);
+          if(error.response) {
+            errorStatus = error.response.status;
+            console.log('Server Responded with ' + errorStatus);
+          }else if(error.request){
+            console.log('No response: ' + errorStatus);
+            errorStatus = error.request;
+          }else{
+            console.log(error);
+          }
+          errorOccurred = true;
         });
-
-    // Reset input
-    this.setState({value: ''});
+    // If error occurred set state so that alert shows
+    if(errorOccurred){
+      this.setState({showAlert: true, errorStatus: errorStatus})
+    }else {
+      this.setState({showAlert: false});
+    }
   }
-
-
-  // Handles user input in query textfield
-  handleChange(event){
-    // Set state to input
-    this.setState({value: event.target.value});
-  }
-
-  // Hanlde operations for componentDidMount part of lifecycle
-  componentDidMount() {
-    // Focus on query input
-    ReactDOM.findDOMNode(this.refs.queryInput).focus();
-  }
-
   render() {
-    return(
-      <Form onSubmit={this.handleSubmit}>
-        <InputGroup className={this.state.className} size={this.state.size} id='query-input'>
-          <Form.Control id='query-command'
-            placeholder='PostgreSQL Query Command'
-            aria-describedby='query-button'
-            value={this.state.value}
-            onChange={this.handleChange}
-            ref='queryInput'/>
-          <InputGroup.Append>
-            <Button variant='outline-success'
-              onClick={this.handleSubmit} type="button">Run</Button>
-          </InputGroup.Append>
-        </InputGroup>
-      </Form>
+    return (
+        <Container fluid>
+          <h1 id='heading' className='center'><strong>PostgreSQL Query Tool</strong></h1>
+          <Row>
+            <Col lg={3} md={1} xs={0}/>
+            <Col lg={6} md={10}>
+              <QueryInput onRequest={this.requestData}/>
+            </Col>
+            <Col lg={3} md={1}xs={0}/>
+          </Row>
+          <Container id='table-area'>
+            <hr />
+            {this.state.showAlert ? <QueryAlert/> : null}
+            <div className='center'>{this.state.queryHistory.length > 0 ?
+                <span className='query-desc'>Last query: <span className='query'>{this.state.queryCurrent}</span></span> : null}</div>
+          </Container>
+        </Container>
     );
-  }
-}
-
-class QueryAlert extends React.Component {
-  constructor(props){
-    super(props);
-
   }
 }
 
