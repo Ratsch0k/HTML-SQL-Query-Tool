@@ -21,6 +21,7 @@ class App extends React.Component {
     };
   }
 
+
   requestData(queryInput){
     const history = this.state.queryHistory;
     // Update state
@@ -31,31 +32,28 @@ class App extends React.Component {
     }
 
     // Send query as get request to node server
-    let errorOccurred = false;
-    let errorStatus = null;
+    let errorStatus;
+    // Bind'self to this, this in request is in different scope
+    let self = this;
     const axios = require('axios');
     axios.get('/query?q=' + queryInput)
         .then(function (res) {
           console.log(res);
+          self.setState({showAlert: false})
         })
         .catch(function (error) {
           if(error.response) {
             errorStatus = error.response.status;
             console.log('Server Responded with ' + errorStatus);
+            self.setState({showAlert: true, errorStatus: errorStatus})
           }else if(error.request){
             console.log('No response: ' + errorStatus);
             errorStatus = error.request;
+            self.setState({showAlert: true, errorStatus: errorStatus})
           }else{
             console.log(error);
           }
-          errorOccurred = true;
         });
-    // If error occurred set state so that alert shows
-    if(errorOccurred){
-      this.setState({showAlert: true, errorStatus: errorStatus})
-    }else {
-      this.setState({showAlert: false});
-    }
   }
   render() {
     return (
@@ -70,7 +68,7 @@ class App extends React.Component {
           </Row>
           <Container id='table-area'>
             <hr />
-            {this.state.showAlert ? <QueryAlert/> : null}
+            <QueryAlert show={this.state.showAlert} status={this.state.errorStatus}/>
             <div className='center'>{this.state.queryHistory.length > 0 ?
                 <span className='query-desc'>Last query: <span className='query'>{this.state.queryCurrent}</span></span> : null}</div>
           </Container>
