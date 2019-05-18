@@ -6,21 +6,23 @@ import QueryInput from './QueryInput';
 import QueryAlert from './QueryAlert';
 
 const historyLength = 5;
+const host = 'localhost';
+const apiPort = '4000';
 
 class App extends React.Component {
   constructor(props){
     super(props);
 
     this.requestData = this.requestData.bind(this);
+    this.onAlertClose = this.onAlertClose.bind(this);
 
     this.state = {
       queryCurrent: '',
       queryHistory: [],
       showAlert: false,
-      errorStatus: null,
+      error: null,
     };
   }
-
 
   requestData(queryInput){
     const history = this.state.queryHistory;
@@ -31,30 +33,30 @@ class App extends React.Component {
       this.setState({queryHistory: history.splice(0, 1)});
     }
 
-    // Send query as get request to node server
-    let errorStatus;
     // Bind'self to this, this in request is in different scope
     let self = this;
     const axios = require('axios');
-    axios.get('/query?q=' + queryInput)
+    axios.get(`http://${host}:${apiPort}/query?q=` + queryInput)
         .then(function (res) {
-          console.log(res);
+          console.log(res.data);
           self.setState({showAlert: false})
         })
         .catch(function (error) {
           if(error.response) {
-            errorStatus = error.response.status;
-            console.log('Server Responded with ' + errorStatus);
-            self.setState({showAlert: true, errorStatus: errorStatus})
+            self.setState({showAlert: true, error: error.response})
           }else if(error.request){
-            console.log('No response: ' + errorStatus);
-            errorStatus = error.request;
-            self.setState({showAlert: true, errorStatus: errorStatus})
+            self.setState({showAlert: true, error: error.request})
           }else{
             console.log(error);
           }
         });
   }
+
+  // onClick function for dismissible alert
+  onAlertClose () {
+    this.setState({showAlert: false});
+  };
+
   render() {
     return (
         <Container fluid>
@@ -68,7 +70,7 @@ class App extends React.Component {
           </Row>
           <Container id='table-area'>
             <hr />
-            <QueryAlert show={this.state.showAlert} status={this.state.errorStatus}/>
+            <QueryAlert show={this.state.showAlert} error={this.state.error} onClick={this.onAlertClose}/>
             <div className='center'>{this.state.queryHistory.length > 0 ?
                 <span className='query-desc'>Last query: <span className='query'>{this.state.queryCurrent}</span></span> : null}</div>
           </Container>
