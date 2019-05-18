@@ -6,8 +6,8 @@ import QueryInput from './QueryInput';
 import QueryAlert from './QueryAlert';
 
 const historyLength = 5;
-const host = 'localhost';
-const apiPort = '4000';
+const host = '192.168.2.100';
+const apiPort = '80';
 
 class App extends React.Component {
   constructor(props){
