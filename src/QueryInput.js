@@ -34,8 +34,6 @@ class QueryInput extends React.Component {
             this.setState({size: '', first: false, className: 'mb-1 mt-1'});
         }
 
-
-
         // Reset input
         this.setState({value: ''});
     }
