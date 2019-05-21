@@ -11,3 +11,28 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+#heading {
+  margin-top: 10px;
+}
+
+.center {
+  text-align: center;
+}
+
+#table-area {
+  margin: 20 px;
+}
+
+#query-input {
+  transition: 0.5s;
+}
+
+.query {
+  font-weight: bold;
+  font-style: italic;
+}
+
+.query-desc{
+  color: darkgray;
+}
