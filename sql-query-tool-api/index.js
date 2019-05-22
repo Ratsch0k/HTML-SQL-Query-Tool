@@ -1,8 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const qh = require('./queryHandler');
+const config = require('./config');
 const app = express();
-const port = 4000;
+const port = config.port;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));

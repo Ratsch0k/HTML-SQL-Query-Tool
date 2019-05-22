@@ -1,11 +1,12 @@
 const pg = require('pg');
+const pgConfig = require('./config');
 
 const client = new pg.Client({
-   user: 'pi',
-   host: '192.168.2.100',
-    database: 'pg_tool',
-    password: 'I3,5JwimBiIhb.',
-    port: 5432,
+   user: pgConfig.pg.port,
+   host: pgConfig.pg.host,
+    database: pgConfig.pg.database,
+    password: pgConfig.pg.password,
+    port: pgConfig.pg.port,
 });
 client.connect();
 

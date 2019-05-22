@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`change size when submitted 1`] = `
+<form
+  className=""
+  onSubmit={[Function]}
+>
+  <div
+    className="mb-3 mt-5 input-group input-group-lg"
+    id="query-input"
+  >
+    <input
+      aria-describedby="query-button"
+      autoFocus={true}
+      className="form-control"
+      id="query-command"
+      onChange={[Function]}
+      placeholder="PostgreSQL Query Command"
+      value=""
+    />
+    <div
+      className="input-group-append"
+    >
+      <button
+        className="btn btn-outline-success"
+        disabled={false}
+        onClick={[Function]}
+        type="button"
+      >
+        Run
+      </button>
+    </div>
+  </div>
+</form>
+`;

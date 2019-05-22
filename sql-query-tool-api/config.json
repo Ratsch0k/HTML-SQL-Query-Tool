@@ -1,0 +1,10 @@
+{
+  "port": 4000,
+  "pg": {
+    "user": "pi",
+    "host": "192.168.2.100",
+    "database": "pg_tool",
+    "password": "I3,5JwimBiIhb.",
+    "port": 5432
+  }
+}

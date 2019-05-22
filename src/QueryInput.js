@@ -43,12 +43,6 @@ class QueryInput extends React.Component {
         this.setState({value: event.target.value});
     }
 
-    // Handle operations for componentDidMount part of lifecycle
-    componentDidMount() {
-        // Focus on query input
-        ReactDOM.findDOMNode(this.refs.queryInput).focus();
-    }
-
     render() {
         return(
             <Form onSubmit={this.handleSubmit}>
@@ -58,7 +52,7 @@ class QueryInput extends React.Component {
                                   aria-describedby='query-button'
                                   value={this.state.value}
                                   onChange={this.handleChange}
-                                  ref='queryInput'/>
+                                  autoFocus/>
                     <InputGroup.Append>
                         <Button variant='outline-success'
                                 onClick={this.handleSubmit} type="button">Run</Button>

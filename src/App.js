@@ -4,10 +4,11 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import QueryInput from './QueryInput';
 import QueryAlert from './QueryAlert';
+import config from './config';
 
 const historyLength = 5;
-const host = '192.168.2.100';
-const apiPort = '80';
+const host = config.host
+const apiPort = config.port;
 
 class App extends React.Component {
   constructor(props){
@@ -72,7 +73,7 @@ class App extends React.Component {
             <hr />
             <QueryAlert show={this.state.showAlert} error={this.state.error} onClick={this.onAlertClose}/>
             <div className='center'>{this.state.queryHistory.length > 0 ?
-                <span className='query-desc'>Last query: <span className='query'>{this.state.queryCurrent}</span></span> : null}</div>
+                <span className='query-desc'>Current query: <span className='query'>{this.state.queryCurrent}</span></span> : null}</div>
           </Container>
         </Container>
     );
