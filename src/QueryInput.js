@@ -9,7 +9,7 @@ class QueryInput extends React.Component {
         super(props, context);
 
         // Bind functions to object
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleRequest = this.props.onRequest;
 
@@ -23,7 +23,7 @@ class QueryInput extends React.Component {
     }
 
     // Handle submit of sql command
-    handleSubmit(event) {
+    onSubmit(event) {
         // Prevent site from refreshing
         event.preventDefault();
 
@@ -45,7 +45,7 @@ class QueryInput extends React.Component {
 
     render() {
         return(
-            <Form onSubmit={this.handleSubmit}>
+            <Form onSubmit={this.onSubmit}>
                 <InputGroup className={this.state.className} size={this.state.size} id='query-input'>
                     <Form.Control id='query-command'
                                   placeholder='PostgreSQL Query Command'
@@ -55,7 +55,7 @@ class QueryInput extends React.Component {
                                   autoFocus/>
                     <InputGroup.Append>
                         <Button variant='outline-success'
-                                onClick={this.handleSubmit} type="button">Run</Button>
+                                onClick={this.onSubmit} type='button'>Run</Button>
                     </InputGroup.Append>
                 </InputGroup>
             </Form>
