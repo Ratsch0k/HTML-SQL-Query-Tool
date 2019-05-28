@@ -4,11 +4,13 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import QueryInput from './QueryInput';
 import QueryAlert from './QueryAlert';
+import QueryTable from './QueryTable';
 import config from './config';
 
 const historyLength = 5;
-const host = config.host
+const host = config.host;
 const apiPort = config.port;
+const axios = require('axios');
 
 class App extends React.Component {
   constructor(props){
@@ -16,16 +18,26 @@ class App extends React.Component {
 
     this.requestData = this.requestData.bind(this);
     this.onAlertClose = this.onAlertClose.bind(this);
+    this.addQueryToHistory = this.addQueryToHistory.bind(this);
+    this.axiosGetRequest = this.axiosGetRequest.bind(this);
 
     this.state = {
       queryCurrent: '',
       queryHistory: [],
       showAlert: false,
       error: null,
+      data: null,
     };
   }
 
+  // Request data with the given queryInput
   requestData(queryInput){
+    this.addQueryToHistory(queryInput);
+    this.axiosGetRequest(queryInput);
+  }
+
+  // Add query to history and set state
+  addQueryToHistory(queryInput){
     const history = this.state.queryHistory;
     // Update state
     this.setState({queryCurrent: queryInput, queryHistory: history.concat([queryInput])});
@@ -33,14 +45,17 @@ class App extends React.Component {
     if(this.state.queryHistory.length >= historyLength) {
       this.setState({queryHistory: history.splice(0, 1)});
     }
+  }
 
+  // Send get request to api
+  axiosGetRequest(queryInput){
     // Bind'self to this, this in request is in different scope
     let self = this;
-    const axios = require('axios');
     axios.get(`http://${host}:${apiPort}/query?q=` + queryInput)
         .then(function (res) {
           console.log(res.data);
-          self.setState({showAlert: false})
+          // Set data to a positive response
+          self.setState({showAlert: false, data: res.data})
         })
         .catch(function (error) {
           if(error.response) {
@@ -74,6 +89,7 @@ class App extends React.Component {
             <QueryAlert show={this.state.showAlert} error={this.state.error} onClick={this.onAlertClose}/>
             <div className='center'>{this.state.queryHistory.length > 0 ?
                 <span className='query-desc'>Current query: <span className='query'>{this.state.queryCurrent}</span></span> : null}</div>
+                <QueryTable data={this.state.data}/>
           </Container>
         </Container>
     );
