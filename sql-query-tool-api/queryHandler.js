@@ -41,7 +41,7 @@ const sendQuery = (query, resHttp) => {
             }
         }else{
             // Send rows back
-            resHttp.json(res.rows).end();
+            resHttp.json(res.rows).send();
         }
   });
 };

@@ -59,9 +59,9 @@ class App extends React.Component {
         })
         .catch(function (error) {
           if(error.response) {
-            self.setState({showAlert: true, error: error.response})
+            self.setState({showAlert: true, error: error.response, data: null})
           }else if(error.request){
-            self.setState({showAlert: true, error: error.request})
+            self.setState({showAlert: true, error: error.request, data: null})
           }else{
             console.log(error);
           }

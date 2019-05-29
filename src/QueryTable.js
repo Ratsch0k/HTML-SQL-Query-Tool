@@ -2,7 +2,8 @@ import React from 'react';
 import Table from 'react-bootstrap/Table'
 
 function QueryTable (props) {
-    if(props.data === null){
+    console.log(props.data);
+    if(props.data === null || props.data === undefined || props.data.length === 0){
         return null;
     }else {
         // Get keys of data
@@ -11,7 +12,7 @@ function QueryTable (props) {
 
         // Generate head of table
         let cells = [];
-        keys.forEach((name) => cells.push(<th key={name}>{name}</th>));
+        keys.forEach((name) => cells.push(<th key={name}><strong>{name.toLocaleUpperCase()}</strong></th>));
         const head = <tr>{cells}</tr>;
 
         // Fill body of table
@@ -29,7 +30,7 @@ function QueryTable (props) {
         });
 
         return (
-            <Table striped hover borderless size='sm'>
+            <Table striped hover size='sm' className='mt-3'>
                 <thead>
                     {head}
                 </thead>

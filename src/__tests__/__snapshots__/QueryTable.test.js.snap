@@ -1,0 +1,89 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`QueryTable changes renders new if data changes 1`] = `null`;
+
+exports[`QueryTable changes renders new if data changes 2`] = `
+<table
+  className="table table-sm table-striped table-borderless table-hover"
+>
+  <thead>
+    <tr>
+      <th>
+        name
+      </th>
+      <th>
+        age
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        Simon
+      </td>
+      <td>
+        20
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Annika
+      </td>
+      <td>
+        20
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Lisa
+      </td>
+      <td>
+        18
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;
+
+exports[`QueryTable changes renders new if data changes 3`] = `
+<table
+  className="table table-sm table-striped table-borderless table-hover"
+>
+  <thead>
+    <tr>
+      <th>
+        name
+      </th>
+      <th>
+        age
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        Simon
+      </td>
+      <td>
+        20
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Annika
+      </td>
+      <td>
+        20
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Lisa
+      </td>
+      <td>
+        18
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;
