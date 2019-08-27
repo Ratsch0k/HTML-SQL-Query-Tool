@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import config from "./config";
 
 const axios = require("axios");
 
@@ -28,7 +29,8 @@ class Login extends React.Component{
             this.setState({disabled: true});
             axios({
                 method: "post",
-                url: "http://localhost:4000/login",
+                baseUrl: `http://${config.host}:${config.port}`,
+                url: "/login",
                 auth: {
                     username: username,
                     password: password
