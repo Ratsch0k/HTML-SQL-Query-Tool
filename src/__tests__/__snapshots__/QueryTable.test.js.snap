@@ -4,15 +4,19 @@ exports[`QueryTable changes renders new if data changes 1`] = `null`;
 
 exports[`QueryTable changes renders new if data changes 2`] = `
 <table
-  className="table table-sm table-striped table-borderless table-hover"
+  className="table mt-3 table-sm table-striped table-hover"
 >
   <thead>
     <tr>
       <th>
-        name
+        <strong>
+          NAME
+        </strong>
       </th>
       <th>
-        age
+        <strong>
+          AGE
+        </strong>
       </th>
     </tr>
   </thead>
@@ -47,15 +51,19 @@ exports[`QueryTable changes renders new if data changes 2`] = `
 
 exports[`QueryTable changes renders new if data changes 3`] = `
 <table
-  className="table table-sm table-striped table-borderless table-hover"
+  className="table mt-3 table-sm table-striped table-hover"
 >
   <thead>
     <tr>
       <th>
-        name
+        <strong>
+          NAME
+        </strong>
       </th>
       <th>
-        age
+        <strong>
+          AGE
+        </strong>
       </th>
     </tr>
   </thead>
