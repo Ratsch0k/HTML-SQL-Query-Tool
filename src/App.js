@@ -6,6 +6,7 @@ import QueryInput from './QueryInput';
 import QueryAlert from './QueryAlert';
 import QueryTable from './QueryTable';
 import config from './config';
+import Login from "./Login";
 
 const historyLength = 5;
 const host = config.host;
@@ -27,6 +28,8 @@ class App extends React.Component {
       showAlert: false,
       error: null,
       data: null,
+      jwt: null,
+      username: null,
     };
   }
 
@@ -75,6 +78,8 @@ class App extends React.Component {
 
   render() {
     return (
+        <>
+        <Login show={true}/>
         <Container fluid>
           <h1 id='heading' className='center'><strong>PostgreSQL Query Tool</strong></h1>
           <Row>
@@ -92,6 +97,7 @@ class App extends React.Component {
                 <QueryTable data={this.state.data}/>
           </Container>
         </Container>
+        </>
     );
   }
 }

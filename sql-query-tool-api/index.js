@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const qh = require('./queryHandler');
 const config = require('./config');
+
+const loginRouter = require("./routes/login");
 const app = express();
 const port = config.port;
 
@@ -12,4 +14,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 const cors = require('cors');
 app.use(cors());
 app.get('/query', qh.getQueryResult);
+app.use("/login", loginRouter);
+
 app.listen(port, () => console.log('Server running on ' + port));

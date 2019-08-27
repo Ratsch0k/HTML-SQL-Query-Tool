@@ -2,16 +2,22 @@ const pg = require('pg');
 const pgConfig = require('./config');
 
 const client = new pg.Client({
-   user: pgConfig.pg.port,
-   host: pgConfig.pg.host,
-    database: pgConfig.pg.database,
-    password: pgConfig.pg.password,
-    port: pgConfig.pg.port,
+   user: pgConfig.pg.user.toString(),
+   host: pgConfig.pg.host.toString(),
+    database: pgConfig.pg.database.toString(),
+    password: pgConfig.pg.password.toString(),
+    port: pgConfig.pg.port.toString(),
 });
-client.connect();
+client.connect().then(() => {
+    console.log("Connection to database established");
+}).catch(err => {
+    console.log(err.message);
+});
+
 
 // Exported function for handling a query
 const getQueryResult = (req, res) => {
+    console.log("Recieved query");
     const now = new Date();
     const query = req.query.q;
 
