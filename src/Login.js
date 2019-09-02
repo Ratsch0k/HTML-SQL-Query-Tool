@@ -1,12 +1,12 @@
 import React from "react";
 import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import Row from "react-bootstrap/Row";
-import Form from "react-bootstrap/Form";
-import Col from "react-bootstrap/Col";
 import config from "./config";
+import LoginForm from "./LoginForm";
+import SignUpForm from "./SignUpForm";
 
-const axios = require("axios");
+const axios = require("axios").create({
+    timeout: 2000
+});
 
 class Login extends React.Component{
     constructor(props, context){
@@ -15,27 +15,29 @@ class Login extends React.Component{
         this.state = {
             show: props.show,
             username: undefined,
+            email: undefined,
             password: undefined,
             valid: false,
-            disabled: false
+            disabled: false,
+            loginSelected: false,
         };
-    }
+    };
 
-    handleSubmit(event){
+    handleLogin = (event) => {
         event.preventDefault();
         let username = this.state.username;
         let password = this.state.password;
         if(typeof username !== "undefined" && typeof password !== "undefined"){
+            let token = Buffer.from(`${username}:${password}`).toString("base64");
             this.setState({disabled: true});
             axios({
                 method: "post",
-                baseUrl: `http://${config.host}:${config.port}`,
-                url: "/login",
-                auth: {
-                    username: username,
-                    password: password
+                url: `http://${config.host}:${config.port}/login`,
+                headers: {
+                    "Authorization": "Basic " + token
                 }
-            }).then(() => {
+            }).then((res) => {
+                console.log(res.data);
                 this.setState({disabled: false, show: false});
             }).catch((err) => {
                this.setState({disabled: false});
@@ -44,56 +46,76 @@ class Login extends React.Component{
         } else {
             console.log("Insufficient Input");
         }
-    }
+    };
+
+    handleSignUp = (event) => {
+        event.preventDefault();
+
+        let username = this.state.username;
+        let email = this.state.email;
+        let password = this.state.password;
+
+        if(typeof username !== "undefined" && typeof email !== "undefined" && typeof password !== "undefined"){
+            let body = {
+                email: email.toString(),
+                username: username.toString(),
+                password: password.toString()
+            };
+            this.setState({disabled: true});
+            axios({
+                method: "post",
+                url: `http://${config.host}:${config.port}/signup`,
+                data: body
+            }).then(res => {
+                console.log(res.data);
+                this.setState({disabled: false});
+            }).catch(err => {
+                console.log(err.message);
+                this.setState({disabled: false});
+            });
+        }
+    };
 
 
-    handleClose(){
+    handleClose = () => {
         this.setState({show: false});
-    }
+    };
 
-    handleChange(event, propertyName) {
+    handleChange = (event, propertyName) => {
         let value = event.target.value;
         let newState = {};
         newState[propertyName] = value;
 
         this.setState(newState);
-    }
+    };
+
+    toggleLoginType = () => {
+        let isLogin = this.state.loginSelected;
+        this.setState({loginSelected: !isLogin});
+    };
 
     render() {
-        return(
-          <Modal show={this.state.show} onHide={() => this.handleClose()}>
-              <Form noValidate onSubmit={(event) => this.handleSubmit(event)}>
-              <Modal.Header>
-                  <Modal.Title>
-                      Login
-                  </Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                  <Form.Group as={Form.Row} controlId="formUsername">
-                      <Form.Label column sm={2}>Username</Form.Label>
-                      <Col sm={10}>
-                          <Form.Control type="text" value={this.state.username}
-                            onChange={(event) => {this.handleChange(event, "username")}}/>
-                      </Col>
-                  </Form.Group>
-                  <Form.Group as={Form.Row} controlId="formPassword">
-                      <Form.Label column sm={2}>Password</Form.Label>
-                      <Col sm={10}>
-                          <Form.Control type="password" value={this.state.password}
-                            onChange={(event) => {this.handleChange(event, "password")}}/>
-                      </Col>
-                  </Form.Group>
+        let form;
 
-                 </Modal.Body>
-                <Modal.Footer>
-                 <Button variant="secondary" disabled={this.state.disabled}
-                         onClick={() => this.handleClose()}>Close</Button>
-                    <Button type="submit" disabled={this.state.disabled}>Submit</Button>
-                </Modal.Footer>
-              </Form>
-          </Modal>
+        if(this.state.loginSelected){
+            form = <LoginForm handleLogin={this.handleLogin} handleChange={this.handleChange}
+                              username={this.state.username} password={this.state.password}
+                              disabled={this.state.disabled} toggleLoginType={this.toggleLoginType}/>;
+        }else {
+            form = <SignUpForm handleSignUp={this.handleSignUp} handleChange={this.handleChange}
+                               username={this.state.username} password={this.state.password}
+                               email={this.state.email} disabled={this.state.disabled}
+                               toggleLoginType={this.toggleLoginType}/>;
+        }
+
+
+        return (
+            <Modal show={this.state.show}>
+                {form}
+            </Modal>
         );
-    }
+    };
+
 }
 
 export default Login;
