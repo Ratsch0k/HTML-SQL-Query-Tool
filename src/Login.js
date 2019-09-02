@@ -68,7 +68,7 @@ class Login extends React.Component{
                 data: body
             }).then(res => {
                 console.log(res.data);
-                this.setState({disabled: false});
+                this.setState({disabled: false, show: false});
             }).catch(err => {
                 console.log(err.message);
                 this.setState({disabled: false});
