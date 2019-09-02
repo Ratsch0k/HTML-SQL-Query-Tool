@@ -1,0 +1,3 @@
+[submodule "HTML-SQL-Query-Tool-Api"]
+	path = HTML-SQL-Query-Tool-Api
+	url = git@github.com:Ratsch0k/HTML-SQL-Query-Tool-Api.git
