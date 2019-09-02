@@ -1,23 +1,11 @@
-const pg = require('pg');
-const pgConfig = require('./config');
+const dbQueries = require("./dbQueries");
 
-const client = new pg.Client({
-   user: pgConfig.pg.user.toString(),
-   host: pgConfig.pg.host.toString(),
-    database: pgConfig.pg.database.toString(),
-    password: pgConfig.pg.password.toString(),
-    port: pgConfig.pg.port.toString(),
-});
-client.connect().then(() => {
-    console.log("Connection to database established");
-}).catch(err => {
-    console.log(err.message);
-});
+const {log} = require("./util");
+
 
 
 // Exported function for handling a query
 const getQueryResult = (req, res) => {
-    console.log("Recieved query");
     const now = new Date();
     const query = req.query.q;
 
@@ -35,27 +23,19 @@ const getQueryResult = (req, res) => {
 // Sending query and handling response and errors
 const sendQuery = (query, resHttp) => {
     // Send query to database with callback
-    client.query(query.toString(), (err, res) => {
-        // Check if database responded with an error, if so handle it
-        if(err !== null){
-            console.log(`Request responded with error code ${err.code}`);
-            // Check which error and send error response
-            switch (err.code){
-                case 42601: resHttp.status(400).end();
-                    break;
-                default: resHttp.status(400).end();
-            }
-        }else{
-            // Send rows back
-            resHttp.json(res.rows).send();
+    dbQueries.makePureQuery(query).then((res) => {
+        // Send rows back
+        resHttp.json(res.rows).send();
+    }).catch(err => {
+        console.log(`Request responded with error code ${err.code}`);
+        // Check which error and send error response
+        switch (err.code){
+            case 42601: resHttp.status(400).end();
+                break;
+            default: resHttp.status(400).end();
         }
-  });
+    });
 };
 
-// Log message with timestamp
-const log = (msg) => {
-  const now = new Date();
-  console.log(`${now.toISOString()}==> ${msg}`);
-};
 
 module.exports = {getQueryResult};

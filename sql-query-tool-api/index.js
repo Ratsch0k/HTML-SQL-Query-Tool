@@ -4,6 +4,7 @@ const qh = require('./queryHandler');
 const config = require('./config');
 
 const loginRouter = require("./routes/login");
+const signUpRouter = require("./routes/signup");
 const app = express();
 const port = config.port;
 
@@ -15,5 +16,6 @@ const cors = require('cors');
 app.use(cors());
 app.get('/query', qh.getQueryResult);
 app.use("/login", loginRouter);
+app.use("/signup", signUpRouter);
 
 app.listen(port, () => console.log('Server running on ' + port));
