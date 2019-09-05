@@ -7,6 +7,7 @@ import QueryAlert from './QueryAlert';
 import QueryTable from './QueryTable';
 import config from './config';
 import Login from "./Login";
+import Button from "react-bootstrap/Button";
 
 const historyLength = 5;
 const host = config.host;
@@ -28,9 +29,21 @@ class App extends React.Component {
       showAlert: false,
       error: null,
       data: null,
-      jwt: null,
-      username: null,
+      userData: null,
+      showLogin: true,
     };
+  }
+
+  componentWillMount() {
+    axios({
+      method: "post",
+      url: `http://${host}:${apiPort}/login`,
+      withCredentials: true
+    }).then(res => {
+      if(res.status === 200){
+        this.setState({userData: res.data, showLogin: false});
+      }
+    });
   }
 
   // Request data with the given queryInput
@@ -53,8 +66,11 @@ class App extends React.Component {
   // Send get request to api
   axiosGetRequest(queryInput){
     // Bind'self to this, this in request is in different scope
+    let options = {
+      withCredentials: true
+    };
     let self = this;
-    axios.get(`http://${host}:${apiPort}/query?q=` + queryInput)
+    axios.get(`http://${host}:${apiPort}/query?q=` + queryInput, options)
         .then(function (res) {
           console.log(res.data);
           // Set data to a positive response
@@ -71,23 +87,68 @@ class App extends React.Component {
         });
   }
 
+  /**
+   * Sets the userData (saved in state) to the object in the parameter userData
+   * The object should contain a name and email address, if user is an admin it should also contain an admin
+   * property with value true
+   *
+   * @method setUserData
+   * @param {Object} userData   New user data
+   */
+  setUserData = (userData) => {
+    console.log(`set user data to -> ${userData}`);
+    this.setState({userData: userData});
+  };
+
   // onClick function for dismissible alert
   onAlertClose () {
     this.setState({showAlert: false});
   };
 
+  logOut = (event) => {
+    event.preventDefault();
+    // Request deletion of authentication cookie
+    axios({
+      method: "post",
+      url: `http://${host}:${apiPort}/logout`,
+      withCredentials: true,
+    }).then(() => {
+      this.setState({userData: null, showLogin: true});
+    });
+  };
+
+  closeLogin = () => {
+    this.setState({showLogin: false});
+  };
+
   render() {
+    let loggedUser;
+    if(this.state.userData !== null && this.state.userData.username !== null){
+      loggedUser = `${this.state.userData.username}.\tLog out?`;
+    } else {
+      loggedUser = "Not logged in";
+    }
+    let loggedUserField = <a onClick={this.logOut} href=""><strong>{loggedUser}</strong></a>;
+
     return (
         <>
-        <Login show={true}/>
+        <Login show={this.state.showLogin} setUserData={this.setUserData} closeLogin={this.closeLogin}/>
         <Container fluid>
-          <h1 id='heading' className='center'><strong>PostgreSQL Query Tool</strong></h1>
           <Row>
+            <Col lg={2} md={2}/>
+            <Col lg={8} md={8}>
+              <h1 id='heading' className='center'><strong>PostgreSQL Query Tool</strong></h1>
+            </Col>
+            <Col lg={2} md={2}>
+              {loggedUserField}
+            </Col>
+          </Row>
+            <Row>
             <Col lg={3} md={1} xs={0}/>
             <Col lg={6} md={10}>
               <QueryInput onRequest={this.requestData}/>
             </Col>
-            <Col lg={3} md={1}xs={0}/>
+            <Col lg={3} md={1} xs={0}/>
           </Row>
           <Container id='table-area'>
             <hr />
