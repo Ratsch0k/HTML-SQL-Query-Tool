@@ -1,8 +1,12 @@
 import React from 'react';
 import * as ReactDOM from "react-dom";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
+import Button from "@material-ui/core/Button";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import FormControl from "@material-ui/core/FormControl";
+import Input from "@material-ui/core/Input";
+import {TextField} from "@material-ui/core";
 
 class QueryInput extends React.Component {
     constructor(props, context) {
@@ -15,9 +19,6 @@ class QueryInput extends React.Component {
 
         // Initialize state
         this.state = {
-            size: 'lg',
-            first: true,
-            className: 'mb-3 mt-5',
             value: '',
         };
     }
@@ -28,11 +29,6 @@ class QueryInput extends React.Component {
         event.preventDefault();
 
         this.handleRequest(this.state.value);
-
-        // If first submit, change state so animation plays
-        if (this.state.first) {
-            this.setState({size: '', first: false, className: 'mb-1 mt-1'});
-        }
 
         // Reset input
         this.setState({value: ''});
@@ -45,20 +41,26 @@ class QueryInput extends React.Component {
 
     render() {
         return(
-            <Form onSubmit={this.onSubmit}>
-                <InputGroup className={this.state.className} size={this.state.size} id='query-input'>
-                    <Form.Control id='query-command'
-                                  placeholder='PostgreSQL Query Command'
-                                  aria-describedby='query-button'
-                                  value={this.state.value}
-                                  onChange={this.handleChange}
-                                  autoFocus/>
-                    <InputGroup.Append>
-                        <Button variant='outline-success'
-                                onClick={this.onSubmit} type='button'>Run</Button>
-                    </InputGroup.Append>
-                </InputGroup>
-            </Form>
+            <form onSubmit={this.onSubmit} noValidate>
+            <FormControl onSubmit={this.onSubmit} variant="standard" fullWidth>
+                    <TextField id='query-command'
+                           fullWidth
+                           placeholder='PostgreSQL Query Command'
+                           aria-describedby='query-button'
+                           value={this.state.value}
+                           onChange={this.handleChange}
+                               variant="outlined"
+                           InputProps={{
+                                   endAdornment: (<InputAdornment>
+                                       <Button color='primary' variant="contained" onClick={this.onSubmit} type='button'>Run</Button>
+                                   </InputAdornment>),
+                               style: {
+                                       fontSize: "large"
+                               },
+                               }}
+                           autoFocus/>
+            </FormControl>
+            </form>
         );
     }
 }

@@ -1,5 +1,9 @@
 import React from 'react';
 import Alert from 'react-bootstrap/Alert';
+import Snackbar from "@material-ui/core/Snackbar";
+import SnackbarContent from "@material-ui/core/SnackbarContent";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from '@material-ui/icons/Close';
 
 const error404Msg = 'Server is currently not available';
 const error400Msg = 'Your query was not valid. Please look for any errors in your query';
@@ -33,9 +37,30 @@ class QueryAlert extends React.Component {
 
     render() {
         return(
+            /*
         <Alert variant='danger' show={this.props.show} onClick={this.props.onClick} dismissible>
             <p className='center'>{this.createErrorMessage(this.props.error)}</p>
         </Alert>
+        */
+            <Snackbar
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center"
+                }}
+                open={this.props.show}
+                autoHideDuration={6000}
+
+                >
+                <SnackbarContent
+                    style={{backgroundColor: "#f44336"}}
+                    message={this.createErrorMessage(this.props.error)}
+                    action={[
+                        <IconButton key="close" aria-label="close" color="inherit" onClick={this.props.onClick}>
+                            <CloseIcon/>
+                        </IconButton>
+                    ]}
+                    />
+            </Snackbar>
         );
     }
 }

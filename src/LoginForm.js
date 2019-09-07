@@ -1,14 +1,20 @@
 import React from "react";
-import Modal from "react-bootstrap/Modal";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import {FormControl} from "@material-ui/core";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import Container from "@material-ui/core/Container";
 
 class LoginForm extends React.Component{
     constructor(props){
         super(props);
     }
 
+    /*
     render(){
         return (
             <Form noValidate onSubmit={this.props.handleLogin}>
@@ -43,6 +49,41 @@ class LoginForm extends React.Component{
                     <Button type="submit" disabled={this.props.disabled}>Submit</Button>
                 </Modal.Footer>
             </Form>
+        );
+    }
+    */
+
+    render() {
+        return (
+            <Container>
+                <DialogTitle id="form-dialog-title">Login</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        To use this website please login. If you don't have an account please click on signup and create one
+                    </DialogContentText>
+                    <form noValidate onSubmit={this.props.handleLogin}>
+                        <FormControl fullWidth margin="normal">
+                         <TextField margin="normal" id="form-login-username" type="text" autoFocus placeholder="Username"
+                                    value={this.props.username}
+                                    onChange={(event) => {
+                                        this.props.handleChange(event, "username")
+                                    }}
+                                    error={this.props.error}
+                                    label={this.props.error ? "Username or Password wrong" : false}/>
+                         <TextField margin="normal" id="form-login-password" type="password"placeholder="Password"
+                                    value={this.props.password}
+                                    onChange={(event) => {
+                                        this.props.handleChange(event, "password")
+                                    }}
+                                    error={this.props.error}/>
+                        </FormControl>
+                        <DialogActions>
+                            <Button onClick={this.props.toggleLoginType}>Signup</Button>
+                            <Button color="primary" type="submit">Submit</Button>
+                        </DialogActions>
+                    </form>
+                </DialogContent>
+            </Container>
         );
     }
 }

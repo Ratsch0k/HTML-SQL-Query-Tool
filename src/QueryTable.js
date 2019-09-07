@@ -1,8 +1,15 @@
 import React from 'react';
-import Table from 'react-bootstrap/Table'
+//import Table from 'react-bootstrap/Table'
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import { spacing } from '@material-ui/system';
+import Box from "@material-ui/core/Box";
 
 function QueryTable (props) {
-    console.log(props.data);
     if(props.data === null || props.data === undefined || props.data.length === 0){
         return null;
     }else {
@@ -12,8 +19,8 @@ function QueryTable (props) {
 
         // Generate head of table
         let cells = [];
-        keys.forEach((name) => cells.push(<th key={name}><strong>{name.toLocaleUpperCase()}</strong></th>));
-        const head = <tr>{cells}</tr>;
+        keys.forEach((name) => cells.push(<TableCell key={name}>{name.toLocaleUpperCase()}</TableCell>));
+        const head = <TableRow>{cells}</TableRow>;
 
         // Fill body of table
         let r = 0, i = 0;
@@ -21,23 +28,29 @@ function QueryTable (props) {
             cells = [];
             // Fill row
             Object.values(rowData).forEach((value) => {
-               cells.push(<td key={`row-${r} cell-${i}`}>{value}</td>);
+               cells.push(<TableCell key={`row-${r} cell-${i}`}>{value}</TableCell>);
                i++;
             });
-            rows.push(<tr key={`row-${r}`}>{cells}</tr>);
+            rows.push(<TableRow key={`row-${r}`}>{cells}</TableRow>);
             i = 0;
             r++;
         });
 
         return (
-            <Table striped hover size='sm' className='mt-3'>
-                <thead>
-                    {head}
-                </thead>
-                <tbody>
-                    {rows}
-                </tbody>
-            </Table>
+            <Box pt={2}>
+                <Paper>
+                    <Box overflow="auto">
+                        <Table>
+                            <TableHead>
+                                {head}
+                            </TableHead>
+                            <TableBody>
+                                {rows}
+                            </TableBody>
+                        </Table>
+                    </Box>
+                </Paper>
+            </Box>
         )
     }
 }

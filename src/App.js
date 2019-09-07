@@ -1,13 +1,13 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import Container from '@material-ui/core/Container';
+import Grid from "@material-ui/core/Grid";
 import QueryInput from './QueryInput';
 import QueryAlert from './QueryAlert';
 import QueryTable from './QueryTable';
 import config from './config';
 import Login from "./Login";
-import Button from "react-bootstrap/Button";
+import Box from "@material-ui/core/Box";
+import {textAlign, spacing} from "@material-ui/system";
 
 const historyLength = 5;
 const host = config.host;
@@ -72,7 +72,6 @@ class App extends React.Component {
     let self = this;
     axios.get(`http://${host}:${apiPort}/query?q=` + queryInput, options)
         .then(function (res) {
-          console.log(res.data);
           // Set data to a positive response
           self.setState({showAlert: false, data: res.data})
         })
@@ -133,29 +132,42 @@ class App extends React.Component {
     return (
         <>
         <Login show={this.state.showLogin} setUserData={this.setUserData} closeLogin={this.closeLogin}/>
-        <Container fluid>
-          <Row>
-            <Col lg={2} md={2}/>
-            <Col lg={8} md={8}>
-              <h1 id='heading' className='center'><strong>PostgreSQL Query Tool</strong></h1>
-            </Col>
-            <Col lg={2} md={2}>
-              {loggedUserField}
-            </Col>
-          </Row>
-            <Row>
-            <Col lg={3} md={1} xs={0}/>
-            <Col lg={6} md={10}>
-              <QueryInput onRequest={this.requestData}/>
-            </Col>
-            <Col lg={3} md={1} xs={0}/>
-          </Row>
+        <Container>
+          <Box paddingY={2}>
+          <Grid container justify="space-between" alignItems="center" my={50}>
+
+            <Grid item lg={2} md={1} xs={false}/>
+
+            <Grid item  lg={8} md={10} xs={12}>
+              <Box textAlign="center"><h1><strong>PostgreSQL Query Tool</strong></h1></Box>
+            </Grid>
+            <Grid item lg={2} md={1} xs={12}>
+              <Grid container justify="center" alignItems="center">
+                {loggedUserField}
+              </Grid>
+            </Grid>
+
+          </Grid>
+          </Box>
+
+
+          <Grid container justify="space-between" alignItems="center">
+
+             <Grid item lg={3} md={1} xs={false}/>
+
+             <Grid item lg={6} md={10} xs={12}>
+                <QueryInput onRequest={this.requestData}/>
+             </Grid>
+
+            <Grid item lg={3} md={1} xs={false}/>
+
+          </Grid>
           <Container id='table-area'>
             <hr />
             <QueryAlert show={this.state.showAlert} error={this.state.error} onClick={this.onAlertClose}/>
             <div className='center'>{this.state.queryHistory.length > 0 ?
                 <span className='query-desc'>Current query: <span className='query'>{this.state.queryCurrent}</span></span> : null}</div>
-                <QueryTable data={this.state.data}/>
+            {this.state.data === null ? <div/> : <QueryTable data={this.state.data}/>}
           </Container>
         </Container>
         </>
