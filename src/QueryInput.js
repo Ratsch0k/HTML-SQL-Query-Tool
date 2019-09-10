@@ -42,24 +42,24 @@ class QueryInput extends React.Component {
     render() {
         return(
             <form onSubmit={this.onSubmit} noValidate>
-            <FormControl onSubmit={this.onSubmit} variant="standard" fullWidth>
-                    <TextField id='query-command'
-                           fullWidth
-                           placeholder='PostgreSQL Query Command'
-                           aria-describedby='query-button'
-                           value={this.state.value}
-                           onChange={this.handleChange}
-                               variant="outlined"
-                           InputProps={{
-                                   endAdornment: (<InputAdornment>
-                                       <Button color='primary' variant="contained" onClick={this.onSubmit} type='button'>Run</Button>
-                                   </InputAdornment>),
-                               style: {
-                                       fontSize: "large"
-                               },
-                               }}
-                           autoFocus/>
-            </FormControl>
+                <FormControl onSubmit={this.onSubmit} variant="standard" fullWidth>
+                        <TextField id='query-command'
+                               fullWidth
+                               placeholder='PostgreSQL Query Command'
+                               aria-describedby='query-button'
+                               value={this.state.value}
+                               onChange={this.handleChange}
+                                   variant="outlined"
+                               InputProps={{
+                                       endAdornment: (<InputAdornment>
+                                           <Button color='primary' variant="contained" onClick={this.onSubmit} type='button'>Run</Button>
+                                       </InputAdornment>),
+                                   style: {
+                                           fontSize: "large"
+                                   },
+                                   }}
+                               autoFocus/>
+                </FormControl>
             </form>
         );
     }

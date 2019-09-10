@@ -33,7 +33,8 @@ it('input changes when submitted', () => {
         },
     };
 
-    tree.children[0].children[0].props.onChange(mockEvent);
+    //tree.children[0].children[0].props.onChange(mockEvent);
+    component.root.findByProps({id: "query-command"}).onChange(mockEvent);
     tree.props.onSubmit(mockEvent);
     // re-render
     tree = component.toJSON();

@@ -2,33 +2,95 @@
 
 exports[`input changes when submitted 1`] = `
 <form
-  className=""
+  noValidate={true}
   onSubmit={[Function]}
 >
   <div
-    className="mb-3 mt-5 input-group input-group-lg"
-    id="query-input"
+    className="MuiFormControl-root MuiFormControl-fullWidth"
+    onSubmit={[Function]}
   >
-    <input
-      aria-describedby="query-button"
-      autoFocus={true}
-      className="form-control"
-      id="query-command"
-      onChange={[Function]}
-      placeholder="PostgreSQL Query Command"
-      value=""
-    />
     <div
-      className="input-group-append"
+      aria-describedby="query-button"
+      className="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"
     >
-      <button
-        className="btn btn-outline-success"
-        disabled={false}
+      <div
+        className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiOutlinedInput-adornedEnd"
         onClick={[Function]}
-        type="button"
+        style={
+          Object {
+            "fontSize": "large",
+          }
+        }
       >
-        Run
-      </button>
+        <input
+          aria-invalid={false}
+          autoFocus={true}
+          className="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd MuiOutlinedInput-inputAdornedEnd"
+          disabled={false}
+          id="query-command"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          placeholder="PostgreSQL Query Command"
+          required={false}
+          type="text"
+          value=""
+        />
+        <div
+          className="MuiInputAdornment-root"
+        >
+          <button
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onDragLeave={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            tabIndex={0}
+            type="button"
+          >
+            <span
+              className="MuiButton-label"
+            >
+              Run
+            </span>
+          </button>
+        </div>
+        <fieldset
+          aria-hidden={true}
+          className="PrivateNotchedOutline-root-143 MuiOutlinedInput-notchedOutline"
+          style={
+            Object {
+              "paddingLeft": 8,
+            }
+          }
+        >
+          <legend
+            className="PrivateNotchedOutline-legend-144"
+            style={
+              Object {
+                "width": 0.01,
+              }
+            }
+          >
+            <span
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "&#8203;",
+                }
+              }
+            />
+          </legend>
+        </fieldset>
+      </div>
     </div>
   </div>
 </form>

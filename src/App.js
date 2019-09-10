@@ -43,6 +43,8 @@ class App extends React.Component {
       if(res.status === 200){
         this.setState({userData: res.data, showLogin: false});
       }
+    }).catch(err => {
+      console.log(err.message);
     });
   }
 
